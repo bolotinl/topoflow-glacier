@@ -1,10 +1,14 @@
 import argparse
+import logging
 
 import numpy as np
 import pandas as pd
 from pyprojroot import here
 
-from topoflow_glacier import BmiTopoflowGlacier, __version__, configure_logging, logger
+from topoflow_glacier import BmiTopoflowGlacier, __version__
+
+# Same logger the BMI uses; it is configured when BmiTopoflowGlacier() is instantiated
+logger = logging.getLogger("TFGLACR")
 
 
 def run_topoflow_glacier(make_plot: bool) -> None:
@@ -15,13 +19,12 @@ def run_topoflow_glacier(make_plot: bool) -> None:
     make_plot: bool
         Saves the output file as a plot
     """
-    configure_logging()
-    logger.info(f"Running Topoflow-Glacier version: {__version__}")
 
     bmi_cfg_file = here() / "config/cat-3062920-const.yaml"
 
     logger.debug("Creating an instance of an BMI_LSTM model object")
     model = BmiTopoflowGlacier()
+    logger.info(f"Running Topoflow-Glacier version: {__version__}")
 
     logger.debug("Initializing the BMI")
     model.initialize(bmi_cfg_file)
@@ -122,7 +125,7 @@ def run_topoflow_glacier(make_plot: bool) -> None:
 
     output_m_total = output_m_total * model.da_m2  # converting m/sec melt to m3/sec
 
-    logger.info(f"|- Final Timestep Relative Humitidy: {output_rh[-1]}")
+    logger.info(f"|- Final Timestep Relative Humidity: {output_rh[-1]}")
     logger.info(f"|- Final Timestep Snow Melt: {output_snow_melt[-1]}")
     logger.info(f"|- Final Timestep Ice Melt: {output_ice_melt[-1]}")
     logger.info(f"|- Final Timestep Height SWE: {output_h_swe[-1]}")

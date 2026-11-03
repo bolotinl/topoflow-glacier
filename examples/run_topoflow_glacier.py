@@ -1,10 +1,14 @@
 import argparse
+import logging
 
 import numpy as np
 import pandas as pd
 from pyprojroot import here
 
-from topoflow_glacier import BmiTopoflowGlacier, __version__, configure_logging, logger
+from topoflow_glacier import BmiTopoflowGlacier, __version__
+
+# Same logger the BMI uses; it is configured when BmiTopoflowGlacier() is instantiated
+logger = logging.getLogger("TFGLACR")
 
 
 def run_topoflow_glacier(make_plot: bool) -> None:
@@ -15,13 +19,12 @@ def run_topoflow_glacier(make_plot: bool) -> None:
     make_plot: bool
         Saves the output file as a plot
     """
-    configure_logging()
-    logger.info(f"Running Topoflow-Glacier version: {__version__}")
 
     bmi_cfg_file = here() / "config/cat-3062920.yaml"
 
     logger.debug("Creating an instance of an BMI_LSTM model object")
     model = BmiTopoflowGlacier()
+    logger.info(f"Running Topoflow-Glacier version: {__version__}")
 
     logger.debug("Initializing the BMI")
     model.initialize(bmi_cfg_file)
