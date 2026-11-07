@@ -615,8 +615,8 @@ class BmiTopoflowGlacier(BmiBase):
         self.set_slope_angle()
 
         # --- initial volumes ---
-        self.vol_swe[:] = np.sum(np.float64(self.h_swe * self.cfg.da))
-        self.vol_iwe[:] = np.sum(np.float64(self.h_iwe * self.cfg.da))
+        self.vol_swe[:] = np.sum(np.float64(self.h_swe * self.da_m2))  # [m^3]
+        self.vol_iwe[:] = np.sum(np.float64(self.h_iwe * self.da_m2))  # [m^3]
 
         # --- time-step index ---
         self._timestep = 0
